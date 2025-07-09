@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Water FootPrint Calculator</title>
+        <link rel="stylesheet" href="striff.css">
+        <link rel="icon" href="save.png" type="image/x-icon">
+        <link rel="shortcut icon" href="save.png" type="image/x-icon">
+    </head>
+    <body>
+        <div class="container">
+            <div class="upper">Welcome</div>
+            <div class="lower">Welcome</div>
+            <div class="inside"><b>Water FootPrint Calculator</b></div>
+        </div>
+        <div class="cont">
+            <h1>Upload an Image</h1>
+            <form id="imageForm" enctype="multipart/form-data" onsubmit="return false;">
+                <input type="file" id="imageInput" accept="image/*">
+                <button type="submit" onclick="processImage()">Analyze</button>
+            </form>
+            <p><span id="displayResult"></span></p>
+        </div>
+        <script>
+            function processImage() {
+                const fileInput = document.getElementById('imageInput');
+                const file = fileInput.files[0];
+                
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = function() {
+                        const base64Image = reader.result.split(',')[1];  // Get base64 data (remove 'data:image/*;base64,' part)
+                        sendToBackend(base64Image);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    document.getElementById('displayResult').innerText = "Please upload an image.";
+                }
+            }
+
+            function sendToBackend(base64Image) {
+                fetch('/analyze-image', {  // Ensure this is the correct backend endpoint
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ base64Image })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.totalWFT !== undefined) {
+                        document.getElementById('displayResult').innerText = 
+                            `Total Water Footprint: ${data.totalWFT} liters`;
+                    } else {
+                        document.getElementById('displayResult').innerText = 
+                            "No water footprint data found.";
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('displayResult').innerText = 'An error occurred. Please try again.';
+                });
+            }
+        </script>
+    </body>
+</html>
