@@ -1,4 +1,4 @@
-# Water Footprint Estimator (WFE)
+# Water Footprint Estimator 
 
 **“Know What You Use. Conserve What You Can.”**
 
