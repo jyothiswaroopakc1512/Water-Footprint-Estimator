@@ -100,8 +100,6 @@ Water-Footprint-Estimator/
 
 ## Diagrams
 
-📌 Suggested additions (you can include these manually):
-
 * Home page with camera/upload UI
 * Output screen with water calculation
 * Tip screen with suggestions
